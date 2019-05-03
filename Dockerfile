@@ -47,7 +47,8 @@ RUN apk add --update --no-cache \
   python3-dev \
   wget
 
-RUN pip3 install virtualenv
+RUN pip3 install awscli \
+  virtualenv \
 RUN virtualenv /venv
 RUN /venv/bin/pip3 install --upgrade pip
 RUN /venv/bin/pip3 install setuptools==41.0.0 \
