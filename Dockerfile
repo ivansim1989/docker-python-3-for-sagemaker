@@ -9,12 +9,15 @@ ENV ROOT_PATH=${PATH}:~/.local/bin
 
 COPY ./requirements.txt /requirements/
 
-RUN apk add --update --no-cache \
+RUN apk add --update --no-cache .builddeps \
+  build-base \
   bash \
   curl \
   freetype \
+  freetype-dev \
   g++ \
   gcc \
+  gfortran \
   jq \
   libffi-dev \
   libressl-dev \
@@ -47,18 +50,21 @@ RUN apk add --update --no-cache \
   python3-dev \
   wget
 
-RUN pip3 install awscli \
-  virtualenv
-RUN virtualenv /venv
-RUN /venv/bin/pip3 install --upgrade pip
-RUN /venv/bin/pip3 install setuptools==41.0.0 \
+RUN pip3 install --upgrade pip
+RUN pip3 install setuptools==41.0.0 \
   awscli \
   autopep8 \
   pylint \
   coverage \
   sphinx \
   sphinx-rtd-theme \
-  s3pypi
+  s3pypi \
+  virtualenv
+
+RUN pip3 install --no-cache-dir -r /requirements/requirements.txt
+
+RUN virtualenv /venv
+RUN /venv/bin/pip3 install --upgrade pip
 RUN /venv/bin/pip3 install --no-cache-dir -r /requirements/requirements.txt
 
 RUN rm -rf /tmp
